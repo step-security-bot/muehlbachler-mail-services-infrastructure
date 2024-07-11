@@ -120,6 +120,16 @@ simplelogin:
     clientSecret: the OIDC client secret for the application
 ```
 
+### Roundcube
+
+```yaml
+roundcube:
+  domain: the webmail domain configuration
+    name: the domain to use
+    zoneId: the Google Cloud zone identifier
+    project: the Google Cloud project (optional)
+```
+
 ### Bucket
 
 ```yaml

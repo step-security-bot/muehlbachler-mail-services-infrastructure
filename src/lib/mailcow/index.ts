@@ -327,12 +327,7 @@ export const installMailcow = (
         {
           create: readFileContents('./assets/mailcow/postinstall.sh'),
           update: readFileContents('./assets/mailcow/postinstall.sh'),
-          triggers: [
-            systemdServiceHash,
-            postfixExtraHash,
-            bodyChecksHash,
-            clientHeadersHash,
-          ],
+          triggers: [postfixExtraHash, bodyChecksHash, clientHeadersHash],
           connection: connection,
         },
         {

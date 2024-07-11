@@ -188,6 +188,7 @@ dist
 build/
 local.env
 outputs/
+tmp/
 gcp-*-key.json
 gke_gcloud_auth_plugin_cache
 export.json

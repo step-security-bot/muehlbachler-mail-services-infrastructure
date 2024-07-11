@@ -7,6 +7,7 @@ import { createHetznerSetup } from './lib/hetzner';
 import { installMailcow } from './lib/mailcow';
 import { createDNSRecords } from './lib/mailcow/record';
 import { createPostgresql } from './lib/postgresql';
+import { installRoundcube } from './lib/roundcube';
 import { installSimpleLogin } from './lib/simplelogin';
 import { installTraefik } from './lib/traefik';
 import { createDir } from './lib/util/create_dir';
@@ -96,6 +97,17 @@ export = async () => {
       traefikInstall,
       server.resource,
     ]),
+  );
+
+  // install roundcube
+  all([gcloud, traefik]).apply(([traefikInstall]) =>
+    installRoundcube(
+      server.sshIPv4,
+      sshKey.privateKeyPem,
+      postgresqlUsers,
+      mailcowApiKeyReadWrite.password,
+      [docker, traefikInstall, server.resource],
+    ),
   );
 
   // write output files for the server
