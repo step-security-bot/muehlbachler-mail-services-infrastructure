@@ -1,5 +1,6 @@
 import { remote } from '@pulumi/command';
 import { all, Output, Resource } from '@pulumi/pulumi';
+import { FileAsset } from '@pulumi/pulumi/asset';
 
 import { b64decode } from '../util/base64';
 import { getFileHash, readFileContents, writeFilePulumi } from '../util/file';
@@ -47,10 +48,10 @@ export const installGCloud = (
     .apply((_) => getFileHash('./outputs/google_credentials.json'));
   const gcpCredentialsCopy = gcpCredentialsHash.apply(
     (hash) =>
-      new remote.CopyFile(
+      new remote.CopyToRemote(
         'remote-copy-gcloud-service-account',
         {
-          localPath: './outputs/google_credentials.json',
+          source: new FileAsset('./outputs/google_credentials.json'),
           remotePath: '/opt/google/credentials.json',
           triggers: [Output.create(hash)],
           connection: connection,

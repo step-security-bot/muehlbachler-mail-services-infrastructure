@@ -1,5 +1,6 @@
 import { remote } from '@pulumi/command';
 import { all, Output, Resource } from '@pulumi/pulumi';
+import { FileAsset } from '@pulumi/pulumi/asset';
 
 import { dnsConfig } from '../configuration';
 import { getFileHash, readFileContents, writeFileContents } from '../util/file';
@@ -47,10 +48,10 @@ export const installTraefik = (
     .apply((_) => getFileHash('./outputs/traefik_docker-compose.yml'));
   const dockerComposeCopy = dockerComposeHash.apply(
     (hash) =>
-      new remote.CopyFile(
+      new remote.CopyToRemote(
         'remote-copy-traefik-docker-compose',
         {
-          localPath: './outputs/traefik_docker-compose.yml',
+          source: new FileAsset('./outputs/traefik_docker-compose.yml'),
           remotePath: '/opt/traefik/docker-compose.yml',
           triggers: [Output.create(hash)],
           connection: connection,
@@ -73,10 +74,10 @@ export const installTraefik = (
     .apply((_) => getFileHash('./outputs/traefik_traefik.yml'));
   const traefikYmlCopy = traefikYmlHash.apply(
     (hash) =>
-      new remote.CopyFile(
+      new remote.CopyToRemote(
         'remote-copy-traefik-config',
         {
-          localPath: './outputs/traefik_traefik.yml',
+          source: new FileAsset('./outputs/traefik_traefik.yml'),
           remotePath: '/opt/traefik/traefik.yml',
           triggers: [Output.create(hash)],
           connection: connection,
@@ -88,10 +89,10 @@ export const installTraefik = (
   );
 
   const systemdServiceHash = getFileHash('./assets/traefik/traefik.service');
-  const systemdServiceCopy = new remote.CopyFile(
+  const systemdServiceCopy = new remote.CopyToRemote(
     'remote-copy-traefik-service',
     {
-      localPath: './assets/traefik/traefik.service',
+      source: new FileAsset('./assets/traefik/traefik.service'),
       remotePath: '/etc/systemd/system/traefik.service',
       triggers: [Output.create(systemdServiceHash)],
       connection: connection,

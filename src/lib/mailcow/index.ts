@@ -1,5 +1,6 @@
 import { remote } from '@pulumi/command';
 import { all, Output, Resource } from '@pulumi/pulumi';
+import { FileAsset } from '@pulumi/pulumi/asset';
 import { parse } from 'yaml';
 
 import { backupBucketId, dnsConfig, mailConfig } from '../configuration';
@@ -51,10 +52,10 @@ export const installMailcow = (
   );
 
   const cronFileHash = getFileHash('./assets/mailcow/cron/cron');
-  const cronFileCopy = new remote.CopyFile(
+  const cronFileCopy = new remote.CopyToRemote(
     'remote-copy-mailcow-cron',
     {
-      localPath: './assets/mailcow/cron/cron',
+      source: new FileAsset('./assets/mailcow/cron/cron'),
       remotePath: '/etc/cron.d/mailcow',
       triggers: [Output.create(cronFileHash)],
       connection: connection,
@@ -80,10 +81,10 @@ export const installMailcow = (
     .apply((_) => getFileHash('./outputs/mailcow_backup'));
   const backupFileCopy = backupFileHash.apply(
     (hash) =>
-      new remote.CopyFile(
+      new remote.CopyToRemote(
         'remote-copy-mailcow-backup',
         {
-          localPath: './outputs/mailcow_backup',
+          source: new FileAsset('./outputs/mailcow_backup'),
           remotePath: '/bin/mailcow-backup',
           triggers: [Output.create(hash)],
           connection: connection,
@@ -111,10 +112,10 @@ export const installMailcow = (
   );
 
   const systemdServiceHash = getFileHash('./assets/mailcow/mailcow.service');
-  const systemdServiceCopy = new remote.CopyFile(
+  const systemdServiceCopy = new remote.CopyToRemote(
     'remote-copy-mailcow-service',
     {
-      localPath: './assets/mailcow/mailcow.service',
+      source: new FileAsset('./assets/mailcow/mailcow.service'),
       remotePath: '/etc/systemd/system/mailcow.service',
       triggers: [Output.create(systemdServiceHash)],
       connection: connection,
@@ -142,10 +143,12 @@ export const installMailcow = (
     .apply((_) => getFileHash('./outputs/mailcow_docker-compose.override.yml'));
   const dockerComposeCopy = dockerComposeHash.apply(
     (hash) =>
-      new remote.CopyFile(
+      new remote.CopyToRemote(
         'remote-copy-mailcow-docker-compose',
         {
-          localPath: './outputs/mailcow_docker-compose.override.yml',
+          source: new FileAsset(
+            './outputs/mailcow_docker-compose.override.yml',
+          ),
           remotePath: '/opt/mailcow/docker-compose.override.yml',
           triggers: [Output.create(hash)],
           connection: connection,
@@ -198,10 +201,10 @@ export const installMailcow = (
     .apply((_) => getFileHash('./outputs/mailcow_mailcow.conf'));
   const configFileCopy = configFileHash.apply(
     (hash) =>
-      new remote.CopyFile(
+      new remote.CopyToRemote(
         'remote-copy-mailcow-conf',
         {
-          localPath: './outputs/mailcow_mailcow.conf',
+          source: new FileAsset('./outputs/mailcow_mailcow.conf'),
           remotePath: '/opt/mailcow/mailcow.conf',
           triggers: [Output.create(hash)],
           connection: connection,
@@ -267,10 +270,10 @@ export const installMailcow = (
   );
   const bodyChecksCopy = installTask.apply(
     (installer) =>
-      new remote.CopyFile(
+      new remote.CopyToRemote(
         'remote-copy-mailcow-postfix-body-checks',
         {
-          localPath: './assets/mailcow/config/body_checks.pcre',
+          source: new FileAsset('./assets/mailcow/config/body_checks.pcre'),
           remotePath: '/opt/mailcow/data/conf/postfix/body_checks.pcre',
           triggers: [Output.create(bodyChecksHash)],
           connection: connection,
@@ -286,10 +289,10 @@ export const installMailcow = (
   );
   const clientHeadersCopy = installTask.apply(
     (installer) =>
-      new remote.CopyFile(
+      new remote.CopyToRemote(
         'remote-copy-mailcow-postfix-client-headers',
         {
-          localPath: './assets/mailcow/config/client_headers.pcre',
+          source: new FileAsset('./assets/mailcow/config/client_headers.pcre'),
           remotePath: '/opt/mailcow/data/conf/postfix/client_headers.pcre',
           triggers: [Output.create(clientHeadersHash)],
           connection: connection,
@@ -303,10 +306,10 @@ export const installMailcow = (
   const postfixExtraHash = getFileHash('./assets/mailcow/config/extra.cf');
   const postfixExtraCopy = installTask.apply(
     (installer) =>
-      new remote.CopyFile(
+      new remote.CopyToRemote(
         'remote-copy-mailcow-postfix-extra',
         {
-          localPath: './assets/mailcow/config/extra.cf',
+          source: new FileAsset('./assets/mailcow/config/extra.cf'),
           remotePath: '/opt/mailcow/data/conf/postfix/extra.cf',
           triggers: [Output.create(postfixExtraHash)],
           connection: connection,

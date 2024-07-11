@@ -1,6 +1,7 @@
 import * as aws from '@pulumi/aws';
 import { remote } from '@pulumi/command';
 import { all, Output, Resource } from '@pulumi/pulumi';
+import { FileAsset } from '@pulumi/pulumi/asset';
 import { parse } from 'yaml';
 
 import { DKIMKey } from '../../model/dkim';
@@ -57,10 +58,10 @@ export const installSimpleLogin = (
   const systemdServiceHash = getFileHash(
     './assets/simplelogin/simplelogin.service',
   );
-  const systemdServiceCopy = new remote.CopyFile(
+  const systemdServiceCopy = new remote.CopyToRemote(
     'remote-copy-simplelogin-service',
     {
-      localPath: './assets/simplelogin/simplelogin.service',
+      source: new FileAsset('./assets/simplelogin/simplelogin.service'),
       remotePath: '/etc/systemd/system/simplelogin.service',
       triggers: [Output.create(systemdServiceHash)],
       connection: connection,
@@ -86,10 +87,10 @@ export const installSimpleLogin = (
     .apply((_) => getFileHash('./outputs/simplelogin_docker-compose.yml'));
   const dockerComposeCopy = dockerComposeHash.apply(
     (hash) =>
-      new remote.CopyFile(
+      new remote.CopyToRemote(
         'remote-copy-simplelogin-docker-compose',
         {
-          localPath: './outputs/simplelogin_docker-compose.yml',
+          source: new FileAsset('./outputs/simplelogin_docker-compose.yml'),
           remotePath: '/opt/simplelogin/docker-compose.yml',
           triggers: [Output.create(hash)],
           connection: connection,
@@ -111,10 +112,10 @@ export const installSimpleLogin = (
     .apply((_) => getFileHash('./outputs/simplelogin_dkim.key'));
   const dkimKeyCopy = dkimKeyHash.apply(
     (hash) =>
-      new remote.CopyFile(
+      new remote.CopyToRemote(
         'remote-copy-simplelogin-dkim-key',
         {
-          localPath: './outputs/simplelogin_dkim.key',
+          source: new FileAsset('./outputs/simplelogin_dkim.key'),
           remotePath: '/opt/simplelogin/dkim.key',
           triggers: [Output.create(hash)],
           connection: connection,
@@ -192,10 +193,10 @@ export const installSimpleLogin = (
     .apply((_) => getFileHash('./outputs/simplelogin_env'));
   const envFileCopy = envFileHash.apply(
     (hash) =>
-      new remote.CopyFile(
+      new remote.CopyToRemote(
         'remote-copy-simplelogin-env',
         {
-          localPath: './outputs/simplelogin_env',
+          source: new FileAsset('./outputs/simplelogin_env'),
           remotePath: '/opt/simplelogin/env',
           triggers: [Output.create(hash)],
           connection: connection,
@@ -215,10 +216,10 @@ export const installSimpleLogin = (
   );
 
   const initShHash = getFileHash('./assets/simplelogin/init.sh');
-  const initShCopy = new remote.CopyFile(
+  const initShCopy = new remote.CopyToRemote(
     'remote-copy-simplelogin-init-sh',
     {
-      localPath: './assets/simplelogin/init.sh',
+      source: new FileAsset('./assets/simplelogin/init.sh'),
       remotePath: '/opt/simplelogin/init.sh',
       triggers: [Output.create(initShHash)],
       connection: connection,

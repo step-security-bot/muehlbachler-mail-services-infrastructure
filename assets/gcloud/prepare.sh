@@ -8,4 +8,4 @@ apt-get install --yes google-cloud-cli
 
 ### traefik ###
 # create directories
-mkdir -p /opt/google
+mkdir -p /opt/google || true

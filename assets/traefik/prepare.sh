@@ -2,4 +2,4 @@
 
 ### traefik ###
 # create directories
-mkdir -p /opt/traefik
+mkdir -p /opt/traefik || true

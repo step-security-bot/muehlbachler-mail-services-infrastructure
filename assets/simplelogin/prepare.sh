@@ -2,4 +2,4 @@
 
 ### simplelogin ###
 # create directories
-mkdir -p /opt/simplelogin
+mkdir -p /opt/simplelogin || true
