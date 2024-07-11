@@ -5,7 +5,7 @@ import { mailConfig } from '../configuration';
 import { createRecord } from '../google/dns/record';
 import { getMailname } from '../util/mail';
 
-const MAIN_SERVER = `${getMailname(mailConfig.main.name)}.`;
+export const MAIL_SERVER_PRIMARY_DOMAIN = `${getMailname(mailConfig.main.name)}.`;
 
 /**
  * Creates the necessary base DNS records.
@@ -44,9 +44,15 @@ export const createDNSRecords = (
 const createDomainDNSRecords = (domain: MailDomainConfig, main: boolean) => {
   // if this is not the main domain, create the 'mail' record
   if (!main) {
-    createRecord(`mail.${domain.name}`, domain.zoneId, 'CNAME', [MAIN_SERVER], {
-      project: domain.project,
-    });
+    createRecord(
+      `mail.${domain.name}`,
+      domain.zoneId,
+      'CNAME',
+      [MAIL_SERVER_PRIMARY_DOMAIN],
+      {
+        project: domain.project,
+      },
+    );
   }
 
   // create the necessary autodiscover, autoconfig, and mta-sts records
@@ -54,7 +60,7 @@ const createDomainDNSRecords = (domain: MailDomainConfig, main: boolean) => {
     `autodiscover.${domain.name}`,
     domain.zoneId,
     'CNAME',
-    [MAIN_SERVER],
+    [MAIL_SERVER_PRIMARY_DOMAIN],
     {
       project: domain.project,
     },
@@ -63,7 +69,7 @@ const createDomainDNSRecords = (domain: MailDomainConfig, main: boolean) => {
     `autoconfig.${domain.name}`,
     domain.zoneId,
     'CNAME',
-    [MAIN_SERVER],
+    [MAIL_SERVER_PRIMARY_DOMAIN],
     {
       project: domain.project,
     },
@@ -72,7 +78,7 @@ const createDomainDNSRecords = (domain: MailDomainConfig, main: boolean) => {
     `mta-sts.${domain.name}`,
     domain.zoneId,
     'CNAME',
-    [MAIN_SERVER],
+    [MAIL_SERVER_PRIMARY_DOMAIN],
     {
       project: domain.project,
     },

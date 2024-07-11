@@ -2,6 +2,7 @@ import { interpolate, Output } from '@pulumi/pulumi';
 
 import { dnsConfig, mailConfig, simpleloginConfig } from '../configuration';
 import { createRecord } from '../google/dns/record';
+import { MAIL_SERVER_PRIMARY_DOMAIN } from '../mailcow/record';
 
 const DKIM_SELECTORS = ['dkim', 'dkim02', 'dkim03'];
 
@@ -11,6 +12,19 @@ const DKIM_SELECTORS = ['dkim', 'dkim02', 'dkim03'];
  * @param {Output<string>} dkimPublicKey the public DKIM key
  */
 export const createDNSRecords = (dkimPublicKey: Output<string>) => {
+  createRecord(
+    simpleloginConfig.domain,
+    simpleloginConfig.mail.zoneId ?? mailConfig.main.zoneId,
+    'CNAME',
+    [MAIL_SERVER_PRIMARY_DOMAIN],
+    {
+      project:
+        simpleloginConfig.mail.project ??
+        mailConfig.main.project ??
+        dnsConfig.project,
+    },
+  );
+
   DKIM_SELECTORS.forEach((selector) =>
     createRecord(
       `${selector}._domainkey.${simpleloginConfig.mail.domain}`,
