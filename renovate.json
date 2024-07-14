@@ -43,7 +43,7 @@
                 "(^|/)docker-compose\\.override\\.yml\\.j2$"
             ],
             "matchStrings": [
-                "#\\s+version:\\s+(?<currentValue>\\S+)"
+                "#version:\\s+(?<currentValue>\\S+)"
             ],
             "depNameTemplate": "mailcow/mailcow-dockerized",
             "versioningTemplate": "regex:^(?<major>\\d+)-(?<minor>\\d+)((?<revision>.+))?$",
