@@ -46,7 +46,7 @@
                 "#version:\\s+(?<currentValue>\\S+)"
             ],
             "depNameTemplate": "mailcow/mailcow-dockerized",
-            "versioningTemplate": "regex:^(?<major>\\d+)-(?<minor>\\d+)(?<revision>.+)?$",
+            "versioningTemplate": "regex:^(?<major>\\d+)-(?<minor>\\d+)((?<revision>.+))?$",
             "datasourceTemplate": "github-releases"
         }
     ]
