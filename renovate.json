@@ -39,7 +39,8 @@
         {
             "customType": "regex",
             "fileMatch": [
-                "(^|/)docker-compose\\.override\\.yml$"
+                "(^|/)docker-compose\\.override\\.yml$",
+                "(^|/)docker-compose\\.override\\.yml\\.j2$"
             ],
             "matchStrings": [
                 "#\\s+version:\\s+(?<currentValue>\\S+)"
