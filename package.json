@@ -24,7 +24,7 @@
     "doc:json": "typedoc src/ --exclude **/*.spec.ts --json build/docs/typedoc.json"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "dependencies": {
     "@pulumi/aws": "^6.44.0",
@@ -42,18 +42,19 @@
     "yaml": "^2.4.1"
   },
   "devDependencies": {
+    "@eslint/compat": "^1.1.1",
     "@types/bcryptjs": "^2.4.2",
     "@types/nunjucks": "^3.2.2",
     "eslint": "^9.2.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-functional": "^6.5.1",
+    "eslint-plugin-functional": "^7.0.0",
     "eslint-plugin-import": "^2.29.1",
     "npm-run-all2": "^6.1.2",
     "prettier": "^3.2.5",
     "ts-node": "^10.9.2",
     "typedoc": "^0.26.0",
     "typescript": "^5.4.5",
-    "typescript-eslint": "8.0.1"
+    "typescript-eslint": "^8.0.1"
   },
   "files": [
     "build/main",
