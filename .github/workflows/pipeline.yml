@@ -39,7 +39,6 @@ jobs:
           exportToken: true
           outputToken: true
           secrets: |
-            github-muehlbachler-mail-services-infrastructure/data/pulumi access_token | PULUMI_ACCESS_TOKEN ;
             github-muehlbachler-mail-services-infrastructure/data/google-cloud region | CLOUDSDK_COMPUTE_REGION ;
             github-muehlbachler-mail-services-infrastructure/data/google-cloud workload_identity_provider | GOOGLE_WORKLOAD_IDENTITY_PROVIDER ;
             github-muehlbachler-mail-services-infrastructure/data/google-cloud ci_service_account | GOOGLE_WORKLOAD_IDENTITY_SERVICE_ACCOUNT ;
@@ -48,6 +47,12 @@ jobs:
             github-muehlbachler-mail-services-infrastructure/data/tailscale oauth_client_id | TS_OAUTH_CLIENT_ID ;
             github-muehlbachler-mail-services-infrastructure/data/tailscale oauth_secret | TS_OAUTH_SECRET ;
             github-muehlbachler-mail-services-infrastructure/data/hetzner token | HCLOUD_TOKEN
+
+      - uses: pulumi/auth-actions@v1
+        with:
+          organization: dmuehlbachler-fh-burgenland
+          requested-token-type: urn:pulumi:token-type:access_token:personal
+          scope: user:dmuehlbachler-fh-burgenland
 
       - uses: google-github-actions/auth@v2
         with:
