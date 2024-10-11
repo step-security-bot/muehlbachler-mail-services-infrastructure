@@ -11,6 +11,7 @@ echo "{{ version }}" > /opt/simplelogin.version
 
 # restart services
 systemctl daemon-reload
+systemctl enable simplelogin
 systemctl restart simplelogin
 
 # cleanup old images
