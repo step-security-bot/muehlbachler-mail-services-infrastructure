@@ -25,6 +25,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - run: |
+          corepack enable
+
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
@@ -65,10 +68,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - run: |
-          npm install -g yarn
-
-      - run: |
-          yarn install
+          yarn install --immutable
           yarn build
 
       - uses: tailscale/github-action@v2
@@ -100,16 +100,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      - run: |
+          corepack enable
+
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-
-      - uses: jaxxstorm/action-install-gh-release@v1.12.0
-        with:
-          repo: k0sproject/k0sctl
-          extension-matching: disable
-          rename-to: k0sctl
-          chmod: 0755
 
       - uses: hashicorp/vault-action@v3
         id: import-secrets
@@ -147,10 +143,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - run: |
-          npm install -g yarn
-
-      - run: |
-          yarn install
+          yarn install --immutable
           yarn build
 
       - uses: tailscale/github-action@v2
